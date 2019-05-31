@@ -5,8 +5,29 @@ import App from './App'
 import router from './router'
 import Element from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+//引入axios
+import axios from 'axios'
+Vue.prototype.$http=axios;
+
 
 Vue.config.productionTip = false
+
+
+
+router.beforeEach((to,from,next) => {
+  if(to.meta.auth) {
+    if(localStorage.getItem('userId')) {
+        next();
+    }else {
+      next({
+        path: '/',
+        query: {redirect: to.fullPath}
+      })
+    }
+  }else {
+    next();
+  }
+})
 
 /* eslint-disable no-new */
 Vue.use(Element)
